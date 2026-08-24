@@ -1,0 +1,1093 @@
+<title>Jarvis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground:        #EFECE4;
+    --surface:        #FAF8F3;
+    --surface-2:      #F1ECE1;
+    --ink:            #1C211F;
+    --ink-2:          #5B6460;
+    --ink-3:          #656C66;
+    --accent:         #986025;
+    --accent-ink:     #FFFFFF;
+    --signal:         #2C5B5E;
+    --line:           rgba(28,33,31,0.12);
+    --line-strong:    rgba(28,33,31,0.24);
+    --good:           #0ca30c;
+    --warning:        #c98500;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --chart-1:        #2a78d6;
+    --chart-2:        #eb6834;
+    --chart-3:        #1baf7a;
+    --chart-4:        #4a3aa7;
+    --shadow:         0 1px 2px rgba(28,33,31,0.07), 0 10px 28px -14px rgba(28,33,31,0.22);
+    --font-display:   'Fraunces', Georgia, serif;
+    --font-sans:      'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono:      'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:        #14171A;
+      --surface:        #1B1F22;
+      --surface-2:      #20252A;
+      --ink:            #EDEAE2;
+      --ink-2:          #A6ACA6;
+      --ink-3:          #828782;
+      --accent:         #D4A057;
+      --accent-ink:     #14171A;
+      --signal:         #6FA8A0;
+      --line:           rgba(237,234,226,0.12);
+      --line-strong:    rgba(237,234,226,0.24);
+      --chart-1:        #3987e5;
+      --chart-2:        #d95926;
+      --chart-3:        #199e70;
+      --chart-4:        #9085e9;
+      --shadow:         0 1px 2px rgba(0,0,0,0.35), 0 14px 32px -16px rgba(0,0,0,0.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:        #14171A;
+    --surface:        #1B1F22;
+    --surface-2:      #20252A;
+    --ink:            #EDEAE2;
+    --ink-2:          #A6ACA6;
+    --ink-3:          #828782;
+    --accent:         #D4A057;
+    --accent-ink:     #14171A;
+    --signal:         #6FA8A0;
+    --line:           rgba(237,234,226,0.12);
+    --line-strong:    rgba(237,234,226,0.24);
+    --chart-1:        #3987e5;
+    --chart-2:        #d95926;
+    --chart-3:        #199e70;
+    --chart-4:        #9085e9;
+    --shadow:         0 1px 2px rgba(0,0,0,0.35), 0 14px 32px -16px rgba(0,0,0,0.55);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  #app-root { max-width: 1180px; margin: 0 auto; padding: 20px 20px 64px; }
+
+  a { color: var(--signal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  button { font-family: inherit; }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 20px; flex-wrap: wrap; padding: 8px 4px 24px;
+  }
+  .eyebrow {
+    margin: 0 0 4px; font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .greeting {
+    margin: 0; font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(22px, 3vw, 32px); letter-spacing: -0.01em; max-width: 640px;
+  }
+  .topbar-meta { display: flex; align-items: center; gap: 14px; }
+  .clock-wrap { text-align: right; }
+  .clock { font-family: var(--font-mono); font-size: 22px; font-weight: 500; line-height: 1; }
+  .date { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+  .status-pills { display: flex; gap: 6px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px;
+    font-family: var(--font-mono); padding: 4px 8px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink-2);
+  }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3); flex: none; }
+  .pill[data-state="live"] .pill-dot { background: var(--good); }
+  .pill[data-state="connecting"] .pill-dot,
+  .pill[data-state="stale"] .pill-dot { background: var(--warning); }
+  .pill[data-state="blocked"] .pill-dot,
+  .pill[data-state="error"] .pill-dot { background: var(--critical); }
+  .refresh-btn {
+    width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink-2); cursor: pointer; font-size: 15px;
+    display: flex; align-items: center; justify-content: center; transition: transform .5s ease, background .2s ease;
+  }
+  .refresh-btn:hover { background: var(--surface-2); color: var(--ink); }
+  .refresh-btn.spinning { animation: spin 900ms linear; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px;
+  }
+  .stat-tile {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px 18px; box-shadow: var(--shadow);
+  }
+  .stat-label { font-size: 12px; color: var(--ink-2); margin: 0 0 6px; }
+  .stat-value { font-family: var(--font-sans); font-weight: 600; font-size: 26px; line-height: 1.1; }
+  .stat-sub { font-size: 12px; color: var(--ink-3); margin-top: 4px; font-family: var(--font-mono); }
+
+  .grid {
+    display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px;
+    grid-template-areas: "calendar actions" "email email" "markets news";
+  }
+  @media (max-width: 880px) {
+    .grid { grid-template-columns: 1fr; grid-template-areas: "calendar" "actions" "email" "markets" "news"; }
+    .stat-strip { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 18px 18px 16px; opacity: 0; transform: translateY(10px);
+  }
+  .panel.panel-in {
+    opacity: 1; transform: none;
+    transition: opacity .5s ease, transform .5s ease;
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  #app-root.no-motion .panel { opacity: 1; transform: none; transition: none; }
+  .panel-calendar { grid-area: calendar; }
+  .panel-actions { grid-area: actions; }
+  .panel-email { grid-area: email; }
+  .panel-markets { grid-area: markets; }
+  .panel-news { grid-area: news; }
+
+  .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .panel-head h2 { margin: 0; font-size: 15px; font-weight: 600; }
+  .panel-sub { font-size: 11px; color: var(--ink-3); font-family: var(--font-mono); }
+
+  .skeleton { border-radius: 8px; background: linear-gradient(90deg, var(--surface-2) 25%, var(--line) 37%, var(--surface-2) 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; }
+  #app-root.no-motion .skeleton { animation: none; background: var(--surface-2); }
+  @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+  .sk-row { height: 44px; margin-bottom: 8px; }
+
+  .empty-state, .error-state {
+    font-size: 13px; color: var(--ink-2); padding: 14px; border-radius: 10px; background: var(--surface-2);
+  }
+  .error-state { color: var(--critical); }
+  .error-state a { color: inherit; text-decoration: underline; }
+
+  /* Calendar */
+  .timeline { position: relative; padding-left: 16px; border-left: 2px solid var(--line); max-height: 420px; overflow-y: auto; }
+  .tl-item { position: relative; padding: 0 0 16px 14px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -21px; top: 3px; width: 10px; height: 10px;
+    border-radius: 50%; background: var(--surface); border: 2px solid var(--chart-1);
+  }
+  .tl-item.tl-past::before { border-color: var(--ink-3); }
+  .tl-item.tl-now::before { border-color: var(--critical); background: var(--critical); }
+  .tl-time { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); }
+  .tl-title { font-size: 13.5px; font-weight: 500; margin-top: 2px; }
+  .tl-meta { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+  .now-line {
+    position: absolute; left: -23px; right: 0; height: 0; border-top: 2px solid var(--critical);
+  }
+  .now-line::after {
+    content: "now"; position: absolute; left: -6px; top: -8px; transform: translateX(-100%);
+    font-family: var(--font-mono); font-size: 10px; color: var(--critical); white-space: nowrap;
+  }
+  .all-day-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .all-day-chip { font-size: 11px; padding: 4px 9px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+
+  /* Action items */
+  .action-group-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); margin: 12px 0 6px; }
+  .action-group-label:first-child { margin-top: 0; }
+  .action-row { display: flex; align-items: flex-start; gap: 9px; padding: 7px 4px; border-radius: 8px; }
+  .action-row:hover { background: var(--surface-2); }
+  .action-check {
+    width: 18px; height: 18px; border-radius: 6px; border: 1.5px solid var(--line-strong);
+    background: var(--surface); flex: none; margin-top: 1px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .action-check.checked { background: var(--accent); border-color: var(--accent); transform: scale(1.05); }
+  .action-check.checked::after { content: "✓"; color: var(--accent-ink); font-size: 12px; line-height: 1; }
+  .action-check:active { transform: scale(0.9); }
+  .action-text { font-size: 13.5px; flex: 1; }
+  .action-text.done { text-decoration: line-through; color: var(--ink-3); }
+  .action-meta { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+  .action-btns { display: flex; gap: 2px; opacity: 0; transition: opacity .15s ease; }
+  .action-row:hover .action-btns { opacity: 1; }
+  .icon-btn { border: none; background: transparent; color: var(--ink-3); cursor: pointer; font-size: 12px; padding: 3px 5px; border-radius: 5px; line-height: 1; }
+  .icon-btn:hover { background: var(--line); color: var(--ink); }
+  .add-action { display: flex; gap: 8px; margin-top: 12px; }
+  .add-action input {
+    flex: 1; border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; font-size: 13px;
+    background: var(--surface); color: var(--ink); font-family: inherit;
+  }
+  .add-action input:focus { outline: 2px solid var(--signal); outline-offset: 1px; }
+  .add-action button {
+    border: none; background: var(--accent); color: var(--accent-ink); border-radius: 9px;
+    padding: 8px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+
+  /* Email */
+  .filter-tabs { display: flex; gap: 4px; }
+  .filter-tabs button {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+    font-size: 11.5px; padding: 5px 10px; border-radius: 999px; cursor: pointer;
+  }
+  .filter-tabs button.active { background: var(--signal); border-color: var(--signal); color: #fff; }
+  .email-row { border-bottom: 1px solid var(--line); padding: 11px 2px; cursor: pointer; }
+  .email-row:last-child { border-bottom: none; }
+  .email-row-head { display: flex; justify-content: space-between; gap: 10px; }
+  .email-sender { font-size: 13px; font-weight: 600; }
+  .email-date { font-size: 11px; color: var(--ink-3); font-family: var(--font-mono); white-space: nowrap; }
+  .email-subject { font-size: 13px; margin-top: 2px; }
+  .email-snippet { font-size: 12px; color: var(--ink-2); margin-top: 2px; max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  .email-row.open .email-snippet { max-height: 120px; margin-top: 5px; }
+  .email-reasons { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+  .reason-chip { font-size: 10.5px; padding: 2px 7px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink-2); }
+  .email-unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); flex: none; margin-top: 4px; }
+
+  /* Markets */
+  .legend-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; font-size: 12px; color: var(--ink-2); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .chart-wrap { overflow-x: auto; }
+  .chart-svg { width: 100%; height: auto; display: block; }
+  .chart-grid { stroke: var(--line); stroke-width: 1; }
+  .chart-caption { font-size: 11px; color: var(--ink-3); font-family: var(--font-mono); margin-top: 6px; }
+  .mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+  .mini-stat { border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+  .mini-stat-label { font-size: 11px; color: var(--ink-2); }
+  .mini-stat-value { font-family: var(--font-mono); font-size: 16px; font-weight: 600; margin-top: 2px; }
+  .mini-stat-delta { font-size: 11px; color: var(--ink-3); margin-top: 1px; }
+
+  /* News */
+  .news-row { padding: 9px 2px; border-bottom: 1px solid var(--line); }
+  .news-row:last-child { border-bottom: none; }
+  .news-title { font-size: 13px; font-weight: 500; }
+  .news-meta { font-size: 11px; color: var(--ink-3); margin-top: 2px; font-family: var(--font-mono); }
+
+  .foot { text-align: center; font-size: 11px; color: var(--ink-3); margin-top: 22px; font-family: var(--font-mono); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel { transition: none !important; opacity: 1 !important; transform: none !important; }
+    .refresh-btn.spinning { animation: none; }
+    .skeleton { animation: none; }
+  }
+</style>
+
+<template id="page-shell">
+  <header class="topbar">
+    <div class="topbar-id">
+      <p class="eyebrow"><span id="greeting-period">Good morning</span></p>
+      <h1 class="greeting" id="greeting-line">Loading your day&hellip;</h1>
+    </div>
+    <div class="topbar-meta">
+      <div class="status-pills" id="status-pills">
+        <span class="pill" data-pill="gmail" data-state="connecting"><span class="pill-dot"></span>Gmail</span>
+        <span class="pill" data-pill="calendar" data-state="connecting"><span class="pill-dot"></span>Calendar</span>
+      </div>
+      <div class="clock-wrap">
+        <div class="clock" id="clock">--:--</div>
+        <div class="date" id="today-date">&nbsp;</div>
+      </div>
+      <button class="refresh-btn" id="refresh-btn" type="button" title="Refresh live data" aria-label="Refresh live data">&#8635;</button>
+    </div>
+  </header>
+
+  <section class="stat-strip">
+    <div class="stat-tile">
+      <p class="stat-label">Next up</p>
+      <div class="stat-value" id="stat-next">&ndash;</div>
+      <div class="stat-sub" id="stat-next-sub">&nbsp;</div>
+    </div>
+    <div class="stat-tile">
+      <p class="stat-label">Important &amp; unread</p>
+      <div class="stat-value" id="stat-important">&ndash;</div>
+      <div class="stat-sub" id="stat-important-sub">in the last 14 days</div>
+    </div>
+    <div class="stat-tile">
+      <p class="stat-label">Open action items</p>
+      <div class="stat-value" id="stat-actions">&ndash;</div>
+      <div class="stat-sub" id="stat-actions-sub">&nbsp;</div>
+    </div>
+  </section>
+
+  <main class="grid">
+    <section class="panel panel-calendar" style="--i:0">
+      <div class="panel-head"><h2>Today</h2><span class="panel-sub" id="calendar-sub"></span></div>
+      <div id="calendar-body"><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div></div>
+    </section>
+
+    <section class="panel panel-actions" style="--i:1">
+      <div class="panel-head"><h2>Action items</h2><span class="panel-sub" id="actions-sub"></span></div>
+      <div id="actions-body"><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div></div>
+      <form class="add-action" id="add-action-form">
+        <input type="text" id="add-action-input" placeholder="Add an item&hellip;" maxlength="140" autocomplete="off">
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <section class="panel panel-email" style="--i:2">
+      <div class="panel-head">
+        <h2>Important email</h2>
+        <div class="filter-tabs" id="email-filters">
+          <button type="button" data-filter="all" class="active">All</button>
+          <button type="button" data-filter="unread">Unread</button>
+          <button type="button" data-filter="reply">Needs reply</button>
+        </div>
+      </div>
+      <div id="email-body"><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div></div>
+    </section>
+
+    <section class="panel panel-markets" style="--i:3">
+      <div class="panel-head"><h2>Markets</h2><span class="panel-sub" id="markets-sub"></span></div>
+      <div id="markets-body"></div>
+    </section>
+
+    <section class="panel panel-news" style="--i:4">
+      <div class="panel-head"><h2>Headlines</h2><span class="panel-sub" id="news-sub"></span></div>
+      <div id="news-body"></div>
+    </section>
+  </main>
+
+  <div class="foot">Jarvis &middot; private dashboard &middot; data via your connected Gmail &amp; Google Calendar</div>
+</template>
+
+<script type="application/json" id="market-data">{"note":"Seed data captured via web search at build time (2026-08-24).","instruments":{"sp500":{"label":"S&P 500","unit":"index","series":[{"date":"2026-08-14","close":7785.76},{"date":"2026-08-21","close":7674.37}]},"nasdaq":{"label":"Nasdaq Composite","unit":"index","series":[{"date":"2026-08-14","close":26729.16},{"date":"2026-08-21","close":26180.45}]},"dow":{"label":"Dow Jones","unit":"index","series":[{"date":"2026-08-14","close":53732.41},{"date":"2026-08-21","close":53277.01}]},"yield10y":{"label":"US 10-Year Yield","unit":"percent","series":[{"date":"2026-08-14","close":4.68},{"date":"2026-08-21","close":4.70}]},"gold":{"label":"Gold","unit":"usd_oz","series":[{"date":"2026-08-20","close":4530}]},"wti":{"label":"WTI Crude","unit":"usd_bbl","series":[{"date":"2026-08-21","close":86.48}]}},"headlines":[{"title":"Dow surges 500 points Friday, but index posts back-to-back weekly losses","source":"CNBC","date":"2026-08-21","url":"https://www.cnbc.com/2026/08/20/stock-market-today-live-updates.html"},{"title":"S&P 500, Russell 2000 jump after tumultuous week for Treasurys","source":"TheStreet","date":"2026-08-21","url":"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-21-2026"},{"title":"US 10-year Treasury yield matches 2026 high near 4.74%, gold extends gains ahead of Jackson Hole","source":"Market Overview","date":"2026-08-21","url":"https://note.com/nk_advisory/n/nf5fd15df0d38?hl=en"},{"title":"S&P 500 slips from record high but caps third straight week of gains","source":"Yahoo Finance","date":"2026-08-14","url":"https://finance.yahoo.com/markets/live/stock-market-today-friday-august-14-dow-sp-500-nasdaq-102635519.html"}],"lastRefreshed":"2026-08-24T00:00:00Z"}</script>
+<script type="application/json" id="user-state">{"checklist":[],"dismissedAuto":[],"emailFilter":"all"}</script>
+
+<div id="app-root"></div>
+
+<script id="boot-script">
+(function () {
+  'use strict';
+
+  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+  function esc(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  var MARKET = JSON.parse(document.getElementById('market-data').textContent);
+
+  function parseUser(text) {
+    try {
+      var u = JSON.parse(text);
+      return {
+        checklist: Array.isArray(u.checklist) ? u.checklist : [],
+        dismissedAuto: Array.isArray(u.dismissedAuto) ? u.dismissedAuto : [],
+        emailFilter: u.emailFilter || 'all'
+      };
+    } catch (e) {
+      return { checklist: [], dismissedAuto: [], emailFilter: 'all' };
+    }
+  }
+  var USER = parseUser(document.getElementById('user-state').textContent);
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- mount static shell from the pristine <template> ----
+  var appRoot = document.getElementById('app-root');
+  appRoot.appendChild(document.getElementById('page-shell').content.cloneNode(true));
+  if (reduceMotion) appRoot.classList.add('no-motion');
+
+  // ================= state =================
+  var calendarState = { status: 'loading', events: [], error: null };
+  var upcomingState = { status: 'loading', events: [], error: null };
+  var emailState = { status: 'loading', threads: [], error: null };
+  var mcpNS = null;
+  var artifactNS = null;
+
+  // ================= persistence (artifact capability) =================
+  var publishTimer = null;
+  function scheduleUserStatePersist() {
+    document.getElementById('user-state').textContent = JSON.stringify(USER);
+    if (!artifactNS) return;
+    clearTimeout(publishTimer);
+    publishTimer = setTimeout(persistUserState, 700);
+  }
+  function buildDocument() {
+    var clone = document.documentElement.cloneNode(true);
+    var root = clone.querySelector('#app-root');
+    if (root) { root.innerHTML = ''; root.removeAttribute('class'); }
+    var md = clone.querySelector('#market-data');
+    if (md) md.textContent = JSON.stringify(MARKET);
+    var us = clone.querySelector('#user-state');
+    if (us) us.textContent = JSON.stringify(USER);
+    return '<!doctype html>\n' + clone.outerHTML;
+  }
+  function persistUserState() {
+    if (!artifactNS) return;
+    artifactNS.publish(buildDocument()).catch(function (err) {
+      // conflict / rate_limited / not_writer are routine per the artifact
+      // capability's failure design — no retry, no user-facing error.
+    });
+  }
+
+  // ================= helpers =================
+  function fmtTime(d) {
+    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+  function fmtEventWhen(ev) {
+    if (!ev.start) return '';
+    if (ev.start.date) return 'All day';
+    var d = new Date(ev.start.dateTime);
+    return fmtTime(d);
+  }
+  function setPill(key, state) {
+    var pill = $('.pill[data-pill="' + key + '"]');
+    if (!pill) return;
+    pill.setAttribute('data-state', state);
+  }
+
+  // ================= clock =================
+  function tickClock() {
+    var now = new Date();
+    var clockEl = document.getElementById('clock');
+    var dateEl = document.getElementById('today-date');
+    var periodEl = document.getElementById('greeting-period');
+    if (clockEl) clockEl.textContent = fmtTime(now);
+    if (dateEl) dateEl.textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+    var h = now.getHours();
+    var period = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+    if (periodEl) periodEl.textContent = period;
+    renderCalendarNowLine();
+  }
+
+  // ================= count-up numbers =================
+  function countUp(el, target) {
+    if (el.dataset.lastVal === String(target)) return;
+    el.dataset.lastVal = String(target);
+    if (reduceMotion || typeof target !== 'number') { el.textContent = target; return; }
+    var start = 0, startTime = null, dur = 600;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var p = Math.min(1, (ts - startTime) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(start + (target - start) * eased);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ================= chart building =================
+  function buildLineChart(seriesList, opts) {
+    opts = opts || {};
+    var width = opts.width || 560, height = opts.height || 170, padding = opts.padding || 24;
+    var allPts = [];
+    seriesList.forEach(function (s) { allPts = allPts.concat(s.points); });
+    if (allPts.length === 0) return '<div class="empty-state">No data yet.</div>';
+    var xs = allPts.map(function (p) { return p.x.getTime(); });
+    var ys = allPts.map(function (p) { return p.y; });
+    var minX = Math.min.apply(null, xs), maxX = Math.max.apply(null, xs);
+    var minY = Math.min.apply(null, ys), maxY = Math.max.apply(null, ys);
+    var spanY = (maxY - minY) || Math.abs(maxY) * 0.02 || 1;
+    var padY = spanY * 0.15;
+    minY -= padY; maxY += padY; spanY = maxY - minY;
+    function xScale(t) { return minX === maxX ? width / 2 : padding + (t - minX) / (maxX - minX) * (width - 2 * padding); }
+    function yScale(v) { return height - padding - (v - minY) / spanY * (height - 2 * padding); }
+    var svg = '<svg viewBox="0 0 ' + width + ' ' + height + '" class="chart-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="' +
+      esc(seriesList.map(function (s) { return s.label; }).join(', ')) + '">';
+    for (var i = 0; i <= 2; i++) {
+      var gy = padding + i * (height - 2 * padding) / 2;
+      svg += '<line x1="' + padding + '" y1="' + gy + '" x2="' + (width - padding) + '" y2="' + gy + '" class="chart-grid"/>';
+    }
+    seriesList.forEach(function (s) {
+      if (s.points.length === 0) return;
+      if (s.points.length === 1) {
+        var p = s.points[0];
+        svg += '<circle cx="' + xScale(p.x.getTime()).toFixed(1) + '" cy="' + yScale(p.y).toFixed(1) +
+          '" r="4" fill="' + s.color + '" stroke="var(--surface)" stroke-width="2"/>';
+        return;
+      }
+      var d = s.points.map(function (p, i2) {
+        return (i2 === 0 ? 'M' : 'L') + xScale(p.x.getTime()).toFixed(1) + ' ' + yScale(p.y).toFixed(1);
+      }).join(' ');
+      svg += '<path d="' + d + '" fill="none" stroke="' + s.color +
+        '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="chart-line" data-animate="draw"/>';
+      var last = s.points[s.points.length - 1];
+      svg += '<circle cx="' + xScale(last.x.getTime()).toFixed(1) + '" cy="' + yScale(last.y).toFixed(1) +
+        '" r="4" fill="' + s.color + '" stroke="var(--surface)" stroke-width="2"/>';
+    });
+    svg += '</svg>';
+    return svg;
+  }
+  function animateLines(container) {
+    if (reduceMotion) return;
+    $$('.chart-line[data-animate="draw"]', container).forEach(function (path) {
+      var len = path.getTotalLength();
+      path.style.strokeDasharray = len;
+      path.style.strokeDashoffset = len;
+      path.getBoundingClientRect();
+      path.style.transition = 'stroke-dashoffset 900ms cubic-bezier(.4,0,.2,1)';
+      requestAnimationFrame(function () { path.style.strokeDashoffset = '0'; });
+    });
+  }
+
+  // ================= markets panel (baked data) =================
+  function seriesPoints(key) {
+    var instr = MARKET.instruments[key];
+    return instr.series.map(function (p) { return { x: new Date(p.date + 'T12:00:00'), y: p.close }; });
+  }
+  function indexedPoints(key) {
+    var pts = seriesPoints(key);
+    if (pts.length === 0) return pts;
+    var base = pts[0].y;
+    return pts.map(function (p) { return { x: p.x, y: (p.y / base) * 100 }; });
+  }
+  function delta(key) {
+    var s = MARKET.instruments[key].series;
+    if (s.length < 2) return null;
+    var prev = s[s.length - 2].close, cur = s[s.length - 1].close;
+    return { abs: cur - prev, pct: (cur - prev) / prev * 100 };
+  }
+  function fmtDelta(d, digits) {
+    if (!d) return 'first reading';
+    var sign = d.pct >= 0 ? '+' : '';
+    return sign + d.pct.toFixed(digits || 1) + '% vs prior reading';
+  }
+  function historyDays(key) { return MARKET.instruments[key].series.length; }
+
+  function renderMarkets() {
+    var body = document.getElementById('markets-body');
+    var eq = [
+      { key: 'sp500', label: 'S&P 500', color: 'var(--chart-1)', points: indexedPoints('sp500') },
+      { key: 'nasdaq', label: 'Nasdaq', color: 'var(--chart-2)', points: indexedPoints('nasdaq') },
+      { key: 'dow', label: 'Dow', color: 'var(--chart-3)', points: indexedPoints('dow') }
+    ];
+    var legend = eq.map(function (s) {
+      return '<span class="legend-item"><span class="legend-swatch" style="background:' + s.color + '"></span>' + esc(s.label) + '</span>';
+    }).join('');
+    var maxDays = Math.max(historyDays('sp500'), historyDays('nasdaq'), historyDays('dow'));
+    var html = '<div class="legend-row">' + legend + '</div>' +
+      '<div class="chart-wrap">' + buildLineChart(eq, { width: 560, height: 170 }) + '</div>' +
+      '<div class="chart-caption">Indexed to 100 at first reading &middot; ' + maxDays + ' day' + (maxDays === 1 ? '' : 's') + ' of history &middot; refreshed weekday mornings</div>';
+
+    var minis = [
+      { key: 'yield10y', label: 'US 10Y Yield', color: 'var(--signal)', fmt: function (v) { return v.toFixed(2) + '%'; } },
+      { key: 'gold', label: 'Gold / oz', color: 'var(--accent)', fmt: function (v) { return '$' + v.toLocaleString(); } },
+      { key: 'wti', label: 'WTI Crude', color: 'var(--chart-4)', fmt: function (v) { return '$' + v.toFixed(2); } }
+    ];
+    html += '<div class="mini-stats">' + minis.map(function (m) {
+      var pts = seriesPoints(m.key);
+      var cur = pts[pts.length - 1].y;
+      var chart = buildLineChart([{ label: m.label, color: m.color, points: pts }], { width: 160, height: 48, padding: 6 });
+      return '<div class="mini-stat">' +
+        '<div class="mini-stat-label">' + esc(m.label) + '</div>' +
+        '<div class="mini-stat-value">' + esc(m.fmt(cur)) + '</div>' +
+        '<div class="mini-stat-delta">' + esc(fmtDelta(delta(m.key))) + '</div>' +
+        '<div class="chart-wrap">' + chart + '</div>' +
+        '</div>';
+    }).join('') + '</div>';
+
+    body.innerHTML = html;
+    animateLines(body);
+    var sub = document.getElementById('markets-sub');
+    var d = new Date(MARKET.lastRefreshed);
+    sub.textContent = 'as of ' + d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  }
+
+  function renderNews() {
+    var body = document.getElementById('news-body');
+    var items = (MARKET.headlines || []).slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+    if (items.length === 0) { body.innerHTML = '<div class="empty-state">No headlines yet.</div>'; return; }
+    body.innerHTML = items.map(function (h) {
+      return '<div class="news-row">' +
+        '<div class="news-title"><a href="' + esc(h.url) + '" target="_blank" rel="noopener">' + esc(h.title) + '</a></div>' +
+        '<div class="news-meta">' + esc(h.source) + ' &middot; ' + esc(new Date(h.date).toLocaleDateString([], { month: 'short', day: 'numeric' })) + '</div>' +
+        '</div>';
+    }).join('');
+    document.getElementById('news-sub').textContent = items.length + ' stories';
+  }
+
+  // ================= calendar panel (live) =================
+  function renderCalendar() {
+    var body = document.getElementById('calendar-body');
+    var sub = document.getElementById('calendar-sub');
+    if (calendarState.status === 'loading') return; // keep skeleton
+    if (calendarState.status === 'blocked') {
+      body.innerHTML = '<div class="error-state">' + esc(calendarState.error) + '</div>';
+      sub.textContent = '';
+      return;
+    }
+    var events = calendarState.events.filter(function (e) { return e.status !== 'cancelled'; });
+    var timed = events.filter(function (e) { return e.start && e.start.dateTime; })
+      .sort(function (a, b) { return new Date(a.start.dateTime) - new Date(b.start.dateTime); });
+    var allDay = events.filter(function (e) { return e.start && e.start.date; });
+
+    sub.textContent = events.length + ' event' + (events.length === 1 ? '' : 's');
+    if (calendarState.status === 'error' || calendarState.status === 'stale') {
+      sub.textContent += ' · ' + esc(calendarState.error);
+    }
+
+    var html = '';
+    if (allDay.length) {
+      html += '<div class="all-day-row">' + allDay.map(function (e) {
+        return '<span class="all-day-chip">' + esc(e.summary || 'Untitled') + '</span>';
+      }).join('') + '</div>';
+    }
+    if (timed.length === 0 && allDay.length === 0) {
+      html += '<div class="empty-state">Nothing on the calendar today.</div>';
+    } else if (timed.length) {
+      var now = new Date();
+      html += '<div class="timeline" id="timeline">' + timed.map(function (ev) {
+        var start = new Date(ev.start.dateTime);
+        var end = ev.end && ev.end.dateTime ? new Date(ev.end.dateTime) : null;
+        var isPast = end ? end < now : start < now;
+        var isNow = start <= now && (!end || end >= now);
+        var attendees = (ev.attendees || []).length;
+        var meta = fmtTime(start) + (end ? '–' + fmtTime(end) : '') + (ev.location ? ' · ' + esc(ev.location) : '') + (attendees > 1 ? ' · ' + attendees + ' attendees' : '');
+        return '<div class="tl-item' + (isPast ? ' tl-past' : '') + (isNow ? ' tl-now' : '') + '" data-start="' + start.getTime() + '" data-end="' + (end ? end.getTime() : '') + '">' +
+          '<div class="tl-time">' + fmtTime(start) + '</div>' +
+          '<div class="tl-title">' + (ev.htmlLink ? '<a href="' + esc(ev.htmlLink) + '" target="_blank" rel="noopener">' + esc(ev.summary || 'Untitled event') + '</a>' : esc(ev.summary || 'Untitled event')) + '</div>' +
+          '<div class="tl-meta">' + meta + '</div>' +
+          '</div>';
+      }).join('') + '</div>';
+    }
+    body.innerHTML = html;
+    renderCalendarNowLine();
+  }
+  function renderCalendarNowLine() {
+    var timeline = document.getElementById('timeline');
+    if (!timeline) return;
+    var existing = timeline.querySelector('.now-line');
+    if (existing) existing.remove();
+    var now = Date.now();
+    var items = $$('.tl-item', timeline);
+    for (var i = 0; i < items.length; i++) {
+      var s = Number(items[i].dataset.start);
+      if (s > now) {
+        var line = document.createElement('div');
+        line.className = 'now-line';
+        items[i].insertBefore(line, items[i].firstChild);
+        break;
+      }
+    }
+  }
+
+  // ================= email panel (live) =================
+  function representativeMessage(thread) {
+    var msgs = thread.messages || [];
+    var nonSent = msgs.filter(function (m) { return (m.labelIds || []).indexOf('SENT') === -1; });
+    var pool = nonSent.length ? nonSent : msgs;
+    return pool[pool.length - 1] || msgs[0] || {};
+  }
+  function scoreThread(thread) {
+    var msg = representativeMessage(thread);
+    var labels = msg.labelIds || [];
+    var important = labels.indexOf('IMPORTANT') !== -1;
+    var unread = labels.indexOf('UNREAD') !== -1;
+    var starred = labels.indexOf('STARRED') !== -1;
+    var subject = msg.subject || '(no subject)';
+    var snippet = msg.snippet || '';
+    var sender = msg.sender || 'Unknown sender';
+    var date = msg.date || new Date().toISOString();
+    var toCount = (msg.toRecipients || []).length;
+    var score = 0; var reasons = [];
+    if (important) { score += 3; reasons.push('Important'); }
+    if (unread) { score += 2; reasons.push('Unread'); }
+    if (starred) { score += 2; reasons.push('Starred'); }
+    if (toCount > 0 && toCount <= 2) { score += 1; reasons.push('Sent directly to you'); }
+    var ageHours = (Date.now() - new Date(date).getTime()) / 3600000;
+    if (ageHours < 24) { score += 1; reasons.push('Today'); }
+    if (/\?/.test(subject + ' ' + snippet)) { score += 1; reasons.push('Has a question'); }
+    if (/\b(asap|deadline|urgent|due|tomorrow)\b/i.test(subject + ' ' + snippet)) { score += 1; reasons.push('Deadline language'); }
+    return {
+      id: thread.id, subject: subject, snippet: snippet, sender: sender, date: date,
+      important: important, unread: unread, starred: starred, score: score, reasons: reasons
+    };
+  }
+  function wireGmail() {
+    mcpNS.watchTool('Gmail', 'search_threads', {
+      query: 'in:inbox newer_than:14d (is:important OR is:unread OR is:starred)',
+      pageSize: 30,
+      view: 'THREAD_VIEW_MINIMAL'
+    }, function (ev) {
+      if (ev.type === 'data') {
+        var payload = ev.result.payload || {};
+        emailState.threads = (payload.threads || []).map(scoreThread).sort(function (a, b) {
+          return b.score - a.score || new Date(b.date) - new Date(a.date);
+        });
+        emailState.status = 'ready'; emailState.error = null;
+        setPill('gmail', 'live');
+      } else {
+        handleWatchError('gmail', ev.error, emailState);
+      }
+      renderEmail(); renderActionItems(); renderStatStrip(); renderGreeting();
+    }, { refetchInterval: 120000 });
+  }
+  function currentEmailFilter() { return USER.emailFilter || 'all'; }
+  function renderEmail() {
+    var body = document.getElementById('email-body');
+    if (emailState.status === 'loading') return;
+    if (emailState.status === 'blocked') {
+      body.innerHTML = '<div class="error-state">' + esc(emailState.error) + '</div>';
+      return;
+    }
+    var filter = currentEmailFilter();
+    var list = emailState.threads.filter(function (t) {
+      if (filter === 'unread') return t.unread;
+      if (filter === 'reply') return t.unread && (t.important || t.starred);
+      return true;
+    }).slice(0, 8);
+    var errNote = (emailState.status === 'error' || emailState.status === 'stale') ?
+      '<div class="error-state" style="margin-bottom:8px;">' + esc(emailState.error) + '</div>' : '';
+    if (list.length === 0) {
+      body.innerHTML = errNote + '<div class="empty-state">Nothing here right now.</div>';
+      return;
+    }
+    body.innerHTML = errNote + list.map(function (t) {
+      return '<div class="email-row" data-id="' + esc(t.id) + '">' +
+        '<div class="email-row-head">' +
+        '<div style="display:flex;gap:7px;align-items:flex-start;">' +
+        (t.unread ? '<span class="email-unread-dot"></span>' : '') +
+        '<div><div class="email-sender">' + esc(t.sender) + '</div>' +
+        '<div class="email-subject">' + esc(t.subject) + '</div></div></div>' +
+        '<div class="email-date">' + esc(new Date(t.date).toLocaleDateString([], { month: 'short', day: 'numeric' })) + '</div>' +
+        '</div>' +
+        '<div class="email-snippet">' + esc(t.snippet) + '</div>' +
+        '<div class="email-reasons">' + t.reasons.map(function (r) { return '<span class="reason-chip">' + esc(r) + '</span>'; }).join('') + '</div>' +
+        '</div>';
+    }).join('');
+    $$('.email-row', body).forEach(function (row) {
+      row.addEventListener('click', function () { row.classList.toggle('open'); });
+    });
+  }
+
+  // ================= action items =================
+  function computeAutoItems() {
+    var items = [];
+    upcomingState.events.forEach(function (ev) {
+      if (ev.status === 'cancelled') return;
+      var self = (ev.attendees || []).filter(function (a) { return a.self; })[0];
+      if (self && self.responseStatus === 'needsAction') {
+        items.push({ id: 'rsvp-' + ev.id, group: 'Needs your RSVP', text: 'RSVP to "' + (ev.summary || 'Untitled event') + '"', meta: fmtEventWhen(ev) + (ev.start && ev.start.dateTime ? ' · ' + new Date(ev.start.dateTime).toLocaleDateString([], { month: 'short', day: 'numeric' }) : ''), url: ev.htmlLink });
+      }
+    });
+    emailState.threads.filter(function (t) { return t.unread; }).forEach(function (t) {
+      var ageHours = (Date.now() - new Date(t.date).getTime()) / 3600000;
+      if (ageHours > 20) {
+        items.push({ id: 'reply-' + t.id, group: 'Waiting on a reply', text: 'Reply to "' + t.subject + '"', meta: t.sender, url: null });
+      }
+    });
+    calendarState.events.forEach(function (ev) {
+      if (!ev.start || !ev.start.dateTime) return;
+      if (new Date(ev.start.dateTime) < new Date()) return;
+      if ((ev.attendees || []).length > 1) {
+        items.push({ id: 'prep-' + ev.id, group: 'Prep for today', text: 'Prep for "' + (ev.summary || 'Untitled event') + '"', meta: fmtTime(new Date(ev.start.dateTime)), url: ev.htmlLink });
+      }
+    });
+    return items.filter(function (i) { return USER.dismissedAuto.indexOf(i.id) === -1; });
+  }
+  function renderActionItems() {
+    var body = document.getElementById('actions-body');
+    if (calendarState.status === 'loading' || emailState.status === 'loading') return;
+    var auto = computeAutoItems();
+    var groups = {};
+    auto.forEach(function (i) { (groups[i.group] = groups[i.group] || []).push(i); });
+    var html = '';
+    Object.keys(groups).forEach(function (g) {
+      html += '<div class="action-group-label">' + esc(g) + '</div>';
+      html += groups[g].map(function (i) {
+        return '<div class="action-row">' +
+          '<button type="button" class="action-check" data-dismiss="' + esc(i.id) + '" aria-label="Dismiss"></button>' +
+          '<div style="flex:1;"><div class="action-text">' + (i.url ? '<a href="' + esc(i.url) + '" target="_blank" rel="noopener">' + esc(i.text) + '</a>' : esc(i.text)) + '</div>' +
+          '<div class="action-meta">' + esc(i.meta || '') + '</div></div>' +
+          '<div class="action-btns"><button type="button" class="icon-btn" data-dismiss-x="' + esc(i.id) + '">✕</button></div>' +
+          '</div>';
+      }).join('');
+    });
+    if (USER.checklist.length) {
+      html += '<div class="action-group-label">Your list</div>';
+      html += USER.checklist.map(function (item, idx) {
+        return '<div class="action-row">' +
+          '<button type="button" class="action-check' + (item.done ? ' checked' : '') + '" data-toggle="' + esc(item.id) + '" aria-label="Toggle done"></button>' +
+          '<div style="flex:1;"><div class="action-text' + (item.done ? ' done' : '') + '">' + esc(item.text) + '</div></div>' +
+          '<div class="action-btns">' +
+          (idx > 0 ? '<button type="button" class="icon-btn" data-move-up="' + esc(item.id) + '">↑</button>' : '') +
+          (idx < USER.checklist.length - 1 ? '<button type="button" class="icon-btn" data-move-down="' + esc(item.id) + '">↓</button>' : '') +
+          '<button type="button" class="icon-btn" data-delete="' + esc(item.id) + '">✕</button>' +
+          '</div></div>';
+      }).join('');
+    }
+    if (!html) html = '<div class="empty-state">Nothing outstanding &mdash; add something below.</div>';
+    body.innerHTML = html;
+
+    $$('[data-dismiss]', body).concat($$('[data-dismiss-x]', body)).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.dataset.dismiss || btn.dataset.dismissX;
+        USER.dismissedAuto.push(id);
+        scheduleUserStatePersist();
+        renderActionItems(); renderStatStrip();
+      });
+    });
+    $$('[data-toggle]', body).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.dataset.toggle;
+        var item = USER.checklist.filter(function (i) { return i.id === id; })[0];
+        if (item) item.done = !item.done;
+        scheduleUserStatePersist();
+        renderActionItems(); renderStatStrip();
+      });
+    });
+    $$('[data-delete]', body).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        USER.checklist = USER.checklist.filter(function (i) { return i.id !== btn.dataset.delete; });
+        scheduleUserStatePersist();
+        renderActionItems(); renderStatStrip();
+      });
+    });
+    $$('[data-move-up]', body).forEach(function (btn) {
+      btn.addEventListener('click', function () { moveChecklistItem(btn.dataset.moveUp, -1); });
+    });
+    $$('[data-move-down]', body).forEach(function (btn) {
+      btn.addEventListener('click', function () { moveChecklistItem(btn.dataset.moveDown, 1); });
+    });
+
+    document.getElementById('actions-sub').textContent = (auto.length + USER.checklist.filter(function (i) { return !i.done; }).length) + ' open';
+  }
+  function moveChecklistItem(id, dir) {
+    var idx = USER.checklist.findIndex(function (i) { return i.id === id; });
+    var newIdx = idx + dir;
+    if (idx < 0 || newIdx < 0 || newIdx >= USER.checklist.length) return;
+    var tmp = USER.checklist[idx];
+    USER.checklist[idx] = USER.checklist[newIdx];
+    USER.checklist[newIdx] = tmp;
+    scheduleUserStatePersist();
+    renderActionItems();
+  }
+
+  // ================= stat strip =================
+  function renderStatStrip() {
+    var nextEl = document.getElementById('stat-next');
+    var nextSub = document.getElementById('stat-next-sub');
+    var upcoming = calendarState.events.filter(function (e) { return e.start && e.start.dateTime && new Date(e.start.dateTime) > new Date() && e.status !== 'cancelled'; })
+      .concat(upcomingState.events.filter(function (e) { return e.start && e.start.dateTime && new Date(e.start.dateTime) > new Date() && e.status !== 'cancelled'; }))
+      .sort(function (a, b) { return new Date(a.start.dateTime) - new Date(b.start.dateTime); });
+    var seen = {};
+    upcoming = upcoming.filter(function (e) { if (seen[e.id]) return false; seen[e.id] = true; return true; });
+    if (calendarState.status === 'loading') {
+      nextEl.textContent = '–'; nextSub.textContent = '';
+    } else if (calendarState.status === 'blocked') {
+      nextEl.textContent = '—'; nextSub.textContent = 'Calendar not connected';
+    } else if (upcoming.length === 0) {
+      nextEl.textContent = 'Clear'; nextSub.textContent = 'nothing else scheduled';
+    } else {
+      var ev = upcoming[0];
+      var start = new Date(ev.start.dateTime);
+      var mins = Math.round((start - new Date()) / 60000);
+      var whenStr = mins < 60 ? ('in ' + mins + ' min') : mins < 1440 ? ('in ' + Math.round(mins / 60) + ' hr') : fmtTime(start);
+      nextEl.textContent = ev.summary || 'Untitled event';
+      nextSub.textContent = whenStr + ' · ' + fmtTime(start);
+    }
+
+    var impEl = document.getElementById('stat-important');
+    if (emailState.status === 'blocked') {
+      impEl.textContent = '—'; impEl.dataset.lastVal = '';
+    } else if (emailState.status !== 'loading') {
+      var count = emailState.threads.filter(function (t) { return t.important && t.unread; }).length;
+      countUp(impEl, count);
+    }
+
+    var actEl = document.getElementById('stat-actions');
+    if (calendarState.status !== 'loading' && emailState.status !== 'loading') {
+      var openCount = computeAutoItems().length + USER.checklist.filter(function (i) { return !i.done; }).length;
+      countUp(actEl, openCount);
+      document.getElementById('stat-actions-sub').textContent = openCount === 0 ? 'all clear' : 'across today';
+    }
+  }
+
+  function renderGreeting() {
+    var line = document.getElementById('greeting-line');
+    if (!line) return;
+    if (calendarState.status === 'loading' && emailState.status === 'loading') return;
+    if (calendarState.status === 'blocked' && emailState.status === 'blocked') {
+      line.textContent = 'Connect Gmail and Google Calendar to see your day here.';
+      return;
+    }
+    var parts = [];
+    if (calendarState.status === 'blocked') {
+      parts.push('calendar not connected');
+    } else {
+      var evCount = calendarState.events.filter(function (e) { return e.status !== 'cancelled'; }).length;
+      parts.push(evCount + ' event' + (evCount === 1 ? '' : 's') + ' today');
+    }
+    if (emailState.status === 'blocked') {
+      parts.push('email not connected');
+    } else {
+      var impCount = emailState.threads.filter(function (t) { return t.important && t.unread; }).length;
+      parts.push(impCount + ' important unread email' + (impCount === 1 ? '' : 's'));
+    }
+    line.textContent = parts.join(' · ') + '.';
+  }
+
+  // ================= error handling =================
+  function describeError(server, code) {
+    switch (code) {
+      case 'needs_reauth': return 'Reconnect ' + server + ' in claude.ai Settings → Connectors';
+      case 'server_not_connected': return 'Add ' + server + ' in claude.ai Settings → Connectors';
+      case 'selection_required': return 'Choose a ' + server + ' account in claude.ai';
+      case 'blocked_by_policy': return server + ' access is blocked by policy';
+      case 'approval_required': return server + ' needs per-call approval';
+      case 'server_unavailable': return server + ' temporarily unavailable — retrying automatically';
+      case 'tool_error': return server + ' reported an error reading data';
+      default: return server + ' is temporarily unreachable';
+    }
+  }
+  function handleWatchError(key, error, stateObj) {
+    var server = key === 'gmail' ? 'Gmail' : 'Google Calendar';
+    var code = error && error.code;
+    var retract = code === 'needs_reauth' || code === 'server_not_connected' || code === 'blocked_by_policy' ||
+      code === 'approval_required' || code === 'selection_required' || code === 'not_granted' || code === 'capability_disabled';
+    if (retract) {
+      stateObj.status = 'blocked';
+      if (key === 'gmail') stateObj.threads = []; else stateObj.events = [];
+    } else {
+      stateObj.status = (stateObj.status === 'ready') ? 'stale' : 'error';
+    }
+    stateObj.error = describeError(server, code);
+    setPill(key, stateObj.status);
+  }
+
+  // ================= mcp wiring =================
+  function wireCalendarToday() {
+    var start = new Date(); start.setHours(0, 0, 0, 0);
+    var end = new Date(); end.setHours(23, 59, 59, 999);
+    mcpNS.watchTool('Google Calendar', 'list_events', {
+      calendarId: 'primary', startTime: start.toISOString(), endTime: end.toISOString(),
+      orderBy: 'startTime', pageSize: 50
+    }, function (ev) {
+      if (ev.type === 'data') {
+        calendarState.events = (ev.result.payload && ev.result.payload.events) || [];
+        calendarState.status = 'ready'; calendarState.error = null;
+        setPill('calendar', 'live');
+      } else {
+        handleWatchError('calendar', ev.error, calendarState);
+      }
+      renderCalendar(); renderActionItems(); renderStatStrip(); renderGreeting();
+    }, { refetchInterval: 180000 });
+  }
+  function wireCalendarUpcoming() {
+    var start = new Date();
+    var end = new Date(Date.now() + 14 * 86400000);
+    mcpNS.watchTool('Google Calendar', 'list_events', {
+      calendarId: 'primary', startTime: start.toISOString(), endTime: end.toISOString(),
+      orderBy: 'startTime', pageSize: 50
+    }, function (ev) {
+      if (ev.type === 'data') {
+        upcomingState.events = (ev.result.payload && ev.result.payload.events) || [];
+        upcomingState.status = 'ready';
+      } else if (ev.type === 'error') {
+        upcomingState.status = upcomingState.status === 'ready' ? 'stale' : 'error';
+      }
+      renderActionItems(); renderStatStrip();
+    }, { refetchInterval: 300000 });
+  }
+
+  function renderUnavailable() {
+    document.getElementById('calendar-body').innerHTML = '<div class="empty-state">Connect Google Calendar in claude.ai Settings → Connectors to see today’s schedule here.</div>';
+    document.getElementById('email-body').innerHTML = '<div class="empty-state">Connect Gmail in claude.ai Settings → Connectors to see important email here.</div>';
+    calendarState.status = 'blocked'; emailState.status = 'blocked'; upcomingState.status = 'blocked';
+    setPill('gmail', 'blocked'); setPill('calendar', 'blocked');
+    document.getElementById('actions-sub').textContent = USER.checklist.filter(function (i) { return !i.done; }).length + ' open';
+    renderActionItemsOffline();
+    renderStatStrip();
+    renderGreeting();
+  }
+  function renderActionItemsOffline() {
+    var body = document.getElementById('actions-body');
+    var html = '';
+    if (USER.checklist.length) {
+      html += USER.checklist.map(function (item, idx) {
+        return '<div class="action-row">' +
+          '<button type="button" class="action-check' + (item.done ? ' checked' : '') + '" data-toggle="' + esc(item.id) + '"></button>' +
+          '<div style="flex:1;"><div class="action-text' + (item.done ? ' done' : '') + '">' + esc(item.text) + '</div></div>' +
+          '<div class="action-btns"><button type="button" class="icon-btn" data-delete="' + esc(item.id) + '">✕</button></div></div>';
+      }).join('');
+    } else {
+      html = '<div class="empty-state">Add your own items below.</div>';
+    }
+    body.innerHTML = html;
+    $$('[data-toggle]', body).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = USER.checklist.filter(function (i) { return i.id === btn.dataset.toggle; })[0];
+        if (item) item.done = !item.done;
+        scheduleUserStatePersist(); renderActionItemsOffline();
+      });
+    });
+    $$('[data-delete]', body).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        USER.checklist = USER.checklist.filter(function (i) { return i.id !== btn.dataset.delete; });
+        scheduleUserStatePersist(); renderActionItemsOffline();
+      });
+    });
+  }
+
+  // ================= interactions =================
+  document.getElementById('add-action-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var input = document.getElementById('add-action-input');
+    var text = input.value.trim();
+    if (!text) return;
+    USER.checklist.push({ id: 'u-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7), text: text, done: false });
+    input.value = '';
+    scheduleUserStatePersist();
+    if (mcpNS) renderActionItems(); else renderActionItemsOffline();
+    renderStatStrip();
+  });
+
+  document.getElementById('email-filters').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-filter]');
+    if (!btn) return;
+    USER.emailFilter = btn.dataset.filter;
+    $$('#email-filters button').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    scheduleUserStatePersist();
+    renderEmail();
+  });
+
+  document.getElementById('refresh-btn').addEventListener('click', function () {
+    var btn = this;
+    if (!reduceMotion) { btn.classList.remove('spinning'); void btn.offsetWidth; btn.classList.add('spinning'); }
+    if (mcpNS) {
+      mcpNS.invalidate('Gmail').catch(function () {});
+      mcpNS.invalidate('Google Calendar').catch(function () {});
+    }
+  });
+
+  // ================= boot =================
+  function stagger() {
+    $$('.panel').forEach(function (p) { requestAnimationFrame(function () { p.classList.add('panel-in'); }); });
+  }
+
+  function boot() {
+    renderMarkets();
+    renderNews();
+    stagger();
+    tickClock();
+    setInterval(tickClock, 1000);
+    $$('#email-filters button').forEach(function (b) { b.classList.toggle('active', b.dataset.filter === currentEmailFilter()); });
+
+    if (window.claude && window.claude.use) {
+      window.claude.use('mcp').then(function (ns) {
+        mcpNS = ns;
+        if (mcpNS) {
+          wireGmail();
+          wireCalendarToday();
+          wireCalendarUpcoming();
+        } else {
+          renderUnavailable();
+        }
+      }).catch(function () { renderUnavailable(); });
+
+      window.claude.use('artifact').then(function (ns) {
+        artifactNS = ns;
+      }).catch(function () { artifactNS = null; });
+    } else {
+      renderUnavailable();
+    }
+  }
+
+  boot();
+})();
+</script>
