@@ -242,6 +242,20 @@
   .email-row.open .email-snippet { max-height: 120px; margin-top: 5px; }
   .email-reasons { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
   .reason-chip { font-size: 10.5px; padding: 2px 7px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); color: var(--ink-2); }
+  .cat-badge { font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 999px; border: 1px solid transparent; }
+  .cat-critical { background: rgba(208,59,59,0.13); border-color: rgba(208,59,59,0.35); color: var(--critical); }
+  .cat-warning  { background: rgba(201,133,0,0.15); border-color: rgba(201,133,0,0.38); color: var(--warning); }
+  .cat-good     { background: rgba(12,163,12,0.13); border-color: rgba(12,163,12,0.35); color: var(--good); }
+  .cat-neutral  { background: var(--surface-2); border-color: var(--line); color: var(--ink-2); }
+  .cat-muted    { background: transparent; border-color: var(--line); color: var(--ink-3); }
+  .noise-toggle {
+    display: block; width: 100%; text-align: left; margin-top: 10px; padding: 9px 10px;
+    border: 1px dashed var(--line-strong); border-radius: 9px; background: transparent;
+    color: var(--ink-3); font-size: 12px; cursor: pointer; font-family: var(--font-mono);
+  }
+  .noise-toggle:hover { background: var(--surface-2); color: var(--ink-2); }
+  .noise-caret { display: inline-block; width: 10px; }
+  .noise-list { margin-top: 4px; opacity: 0.75; }
   .email-unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); flex: none; margin-top: 4px; }
 
   /* Markets */
@@ -299,9 +313,9 @@
       <div class="stat-sub" id="stat-next-sub">&nbsp;</div>
     </div>
     <div class="stat-tile">
-      <p class="stat-label">Important &amp; unread</p>
+      <p class="stat-label">Job responses</p>
       <div class="stat-value" id="stat-important">&ndash;</div>
-      <div class="stat-sub" id="stat-important-sub">in the last 14 days</div>
+      <div class="stat-sub" id="stat-important-sub">open in your pipeline</div>
     </div>
     <div class="stat-tile">
       <p class="stat-label">Open action items</p>
@@ -330,8 +344,9 @@
         <h2>Important email</h2>
         <div class="filter-tabs" id="email-filters">
           <button type="button" data-filter="all" class="active">All</button>
-          <button type="button" data-filter="unread">Unread</button>
-          <button type="button" data-filter="reply">Needs reply</button>
+          <button type="button" data-filter="action">Needs action</button>
+          <button type="button" data-filter="job">Job</button>
+          <button type="button" data-filter="payments">Payments</button>
         </div>
       </div>
       <div id="email-body"><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div></div>
@@ -351,7 +366,7 @@
   <div class="foot">Jarvis &middot; private dashboard &middot; data via your connected Gmail &amp; Google Calendar</div>
 </template>
 
-<script type="application/json" id="market-data">{"note":"Seed data captured via web search at build time (2026-08-24). Each weekday refresh appends one verified close per instrument. Series lengths differ because only these points could be confirmed from public reporting at seed time.","instruments":{"sp500":{"label":"S&P 500","unit":"index","series":[{"date":"2026-08-14","close":7785.76},{"date":"2026-08-21","close":7674.37}]},"nasdaq":{"label":"Nasdaq Composite","unit":"index","series":[{"date":"2026-08-14","close":26729.16},{"date":"2026-08-21","close":26180.45}]},"dow":{"label":"Dow Jones","unit":"index","series":[{"date":"2026-08-14","close":53732.41},{"date":"2026-08-21","close":53277.01}]},"yield10y":{"label":"US 10-Year Yield","unit":"percent","series":[{"date":"2026-08-14","close":4.68},{"date":"2026-08-21","close":4.7}]},"gold":{"label":"Gold","unit":"usd_oz","series":[{"date":"2026-08-20","close":4530}]},"wti":{"label":"WTI Crude","unit":"usd_bbl","series":[{"date":"2026-08-21","close":86.48},{"date":"2026-08-24","close":85.93}]}},"headlines":[{"title":"Oil falls as investors await details of toughest-ever US sanctions campaign against Iran","source":"CNBC","date":"2026-08-24","url":"https://www.cnbc.com/2026/08/24/oil-price-today-wti-brent-us-sanctions-iran.html"},{"title":"Asian stocks dip with AI trade in focus, oil declines as Jackson Hole, Nvidia earnings loom","source":"Bloomberg","date":"2026-08-23","url":"https://www.bloomberg.com/news/articles/2026-08-23/stock-market-today-dow-s-p-live-updates"},{"title":"Stock market next week: Outlook for Aug. 24-28, 2026","source":"CNBC","date":"2026-08-21","url":"https://www.cnbc.com/2026/08/21/stock-market-next-week-outlook-for-aug-24-28-2026.html"},{"title":"Dow surges 500 points Friday, but index posts back-to-back weekly losses","source":"CNBC","date":"2026-08-21","url":"https://www.cnbc.com/2026/08/20/stock-market-today-live-updates.html"}],"lastRefreshed":"2026-08-24T15:30:00Z"}</script>
+<script type="application/json" id="market-data">{"note":"Seed data captured via web search at build time (2026-08-24). Each weekday refresh appends one verified close per instrument. Series lengths differ because only these points could be confirmed from public reporting at seed time.","instruments":{"sp500":{"label":"S&P 500","unit":"index","series":[{"date":"2026-08-14","close":7785.76},{"date":"2026-08-21","close":7674.37}]},"nasdaq":{"label":"Nasdaq Composite","unit":"index","series":[{"date":"2026-08-14","close":26729.16},{"date":"2026-08-21","close":26180.45}]},"dow":{"label":"Dow Jones","unit":"index","series":[{"date":"2026-08-14","close":53732.41},{"date":"2026-08-21","close":53277.01}]},"yield10y":{"label":"US 10-Year Yield","unit":"percent","series":[{"date":"2026-08-14","close":4.68},{"date":"2026-08-21","close":4.7},{"date":"2026-08-24","close":4.71}]},"gold":{"label":"Gold","unit":"usd_oz","series":[{"date":"2026-08-20","close":4530},{"date":"2026-08-24","close":4645.74}]},"wti":{"label":"WTI Crude","unit":"usd_bbl","series":[{"date":"2026-08-21","close":86.48},{"date":"2026-08-24","close":85.93}]}},"headlines":[{"title":"Stock market today: Dow, S&P 500, Nasdaq futures mixed after US-Canada talks break down","source":"Yahoo Finance","date":"2026-08-24","url":"https://finance.yahoo.com/markets/live/stock-market-today-monday-august-24-dow-sp-500-nasdaq-080306047.html"},{"title":"Stock Market Today: Dow futures slide on Iran sanctions, U.S.-Canada tariff threats","source":"TheStreet","date":"2026-08-24","url":"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-24-2026"},{"title":"Oil falls as investors await details of toughest-ever US sanctions campaign against Iran","source":"CNBC","date":"2026-08-24","url":"https://www.cnbc.com/2026/08/24/oil-price-today-wti-brent-us-sanctions-iran.html"},{"title":"Asia Stock Market Today: Alibaba dilution and Samsung disappointment deepen Asia tech selloff","source":"ts2.tech","date":"2026-08-24","url":"https://ts2.tech/en/stock-market-today-08-24-2026-asia/"}],"lastRefreshed":"2026-08-24T11:21:55Z"}</script>
 <script type="application/json" id="user-state">{"checklist":[],"dismissedAuto":[],"emailFilter":"all"}</script>
 
 <div id="app-root"></div>
@@ -673,9 +688,35 @@
     var pool = nonSent.length ? nonSent : msgs;
     return pool[pool.length - 1] || msgs[0] || {};
   }
+  // Category labels written by the inbox triage agent (see agent/inbox-triage.md).
+  // Each entry: label id -> {key, badge, tone, boost, noise}
+  var CATEGORY_LABELS = {
+    'Label_3963928434442907346': { key: 'action',   badge: 'Action required', tone: 'critical', boost: 10 },
+    'Label_17':                  { key: 'disputed', badge: 'Disputed charge', tone: 'critical', boost: 9 },
+    'Label_16':                  { key: 'due',      badge: 'Payment due',     tone: 'critical', boost: 9 },
+    'Label_18':                  { key: 'renewal',  badge: 'Renews soon',     tone: 'warning',  boost: 7 },
+    'Label_13':                  { key: 'jobresp',  badge: 'Job response',    tone: 'good',     boost: 8 },
+    'Label_11':                  { key: 'waiting',  badge: 'Waiting on them', tone: 'neutral',  boost: 4 },
+    'Label_9':                   { key: 'work',     badge: 'Work',            tone: 'neutral',  boost: 3 },
+    'Label_6':                   { key: 'personal', badge: 'Personal',        tone: 'neutral',  boost: 3 },
+    'Label_7':                   { key: 'receipt',  badge: 'Receipt',         tone: 'neutral',  boost: 0 },
+    'Label_14':                  { key: 'jobleads', badge: 'Job alert',       tone: 'muted',    boost: -6, noise: true },
+    'Label_10':                  { key: 'news',     badge: 'Promotional',     tone: 'muted',    boost: -8, noise: true }
+  };
+  var PAYMENT_KEYS = { due: 1, disputed: 1, renewal: 1 };
+
+  function threadLabelIds(thread) {
+    var seen = {};
+    (thread.messages || []).forEach(function (m) {
+      (m.labelIds || []).forEach(function (l) { seen[l] = 1; });
+    });
+    return Object.keys(seen);
+  }
+
   function scoreThread(thread) {
     var msg = representativeMessage(thread);
     var labels = msg.labelIds || [];
+    var allLabels = threadLabelIds(thread);
     var important = labels.indexOf('IMPORTANT') !== -1;
     var unread = labels.indexOf('UNREAD') !== -1;
     var starred = labels.indexOf('STARRED') !== -1;
@@ -685,6 +726,17 @@
     var date = msg.date || new Date().toISOString();
     var toCount = (msg.toRecipients || []).length;
     var score = 0; var reasons = [];
+
+    // Semantic categories from the triage agent take precedence over the heuristic.
+    var cats = [];
+    allLabels.forEach(function (id) {
+      var c = CATEGORY_LABELS[id];
+      if (c) cats.push(c);
+    });
+    var isNoise = cats.some(function (c) { return c.noise; });
+    var triaged = allLabels.indexOf('Label_19') !== -1;
+    cats.forEach(function (c) { score += c.boost; });
+
     if (important) { score += 3; reasons.push('Important'); }
     if (unread) { score += 2; reasons.push('Unread'); }
     if (starred) { score += 2; reasons.push('Starred'); }
@@ -693,15 +745,22 @@
     if (ageHours < 24) { score += 1; reasons.push('Today'); }
     if (/\?/.test(subject + ' ' + snippet)) { score += 1; reasons.push('Has a question'); }
     if (/\b(asap|deadline|urgent|due|tomorrow)\b/i.test(subject + ' ' + snippet)) { score += 1; reasons.push('Deadline language'); }
+
+    var keys = {};
+    cats.forEach(function (c) { keys[c.key] = 1; });
     return {
       id: thread.id, subject: subject, snippet: snippet, sender: sender, date: date,
-      important: important, unread: unread, starred: starred, score: score, reasons: reasons
+      important: important, unread: unread, starred: starred, score: score, reasons: reasons,
+      cats: cats, keys: keys, noise: isNoise, triaged: triaged,
+      needsAction: !!keys.action,
+      isJob: !!(keys.jobresp || keys.jobleads),
+      isPayment: !!(keys.due || keys.disputed || keys.renewal)
     };
   }
   function wireGmail() {
     mcpNS.watchTool('Gmail', 'search_threads', {
-      query: 'in:inbox newer_than:14d (is:important OR is:unread OR is:starred)',
-      pageSize: 30,
+      query: 'in:inbox newer_than:14d (is:important OR is:unread OR is:starred OR label:Label_19)',
+      pageSize: 50,
       view: 'THREAD_VIEW_MINIMAL'
     }, function (ev) {
       if (ev.type === 'data') {
@@ -717,7 +776,37 @@
       renderEmail(); renderActionItems(); renderStatStrip(); renderGreeting();
     }, { refetchInterval: 120000 });
   }
-  function currentEmailFilter() { return USER.emailFilter || 'all'; }
+  var VALID_FILTERS = { all: 1, action: 1, job: 1, payments: 1 };
+  function currentEmailFilter() {
+    // Older versions persisted 'unread'/'reply'; fall back rather than orphan the tab row.
+    var f = USER.emailFilter;
+    return VALID_FILTERS[f] ? f : 'all';
+  }
+  var noiseExpanded = false;
+
+  function matchesFilter(t, filter) {
+    if (filter === 'action') return t.needsAction;
+    if (filter === 'job') return t.isJob;
+    if (filter === 'payments') return t.isPayment;
+    return true;
+  }
+  function emailRowHtml(t) {
+    var badges = t.cats.filter(function (c) { return !c.noise; }).map(function (c) {
+      return '<span class="cat-badge cat-' + c.tone + '">' + esc(c.badge) + '</span>';
+    }).join('');
+    return '<div class="email-row" data-id="' + esc(t.id) + '">' +
+      '<div class="email-row-head">' +
+      '<div style="display:flex;gap:7px;align-items:flex-start;">' +
+      (t.unread ? '<span class="email-unread-dot"></span>' : '') +
+      '<div><div class="email-sender">' + esc(t.sender) + '</div>' +
+      '<div class="email-subject">' + esc(t.subject) + '</div></div></div>' +
+      '<div class="email-date">' + esc(new Date(t.date).toLocaleDateString([], { month: 'short', day: 'numeric' })) + '</div>' +
+      '</div>' +
+      '<div class="email-snippet">' + esc(t.snippet) + '</div>' +
+      '<div class="email-reasons">' + badges +
+      t.reasons.map(function (r) { return '<span class="reason-chip">' + esc(r) + '</span>'; }).join('') + '</div>' +
+      '</div>';
+  }
   function renderEmail() {
     var body = document.getElementById('email-body');
     if (emailState.status === 'loading') return;
@@ -726,33 +815,48 @@
       return;
     }
     var filter = currentEmailFilter();
-    var list = emailState.threads.filter(function (t) {
-      if (filter === 'unread') return t.unread;
-      if (filter === 'reply') return t.unread && (t.important || t.starred);
-      return true;
-    }).slice(0, 8);
+    var matching = emailState.threads.filter(function (t) { return matchesFilter(t, filter); });
+
+    // The triage agent's noise verdicts collapse out of the main list. On an explicit
+    // Job filter, job alerts are what you asked for, so they stay.
+    var suppressNoise = filter !== 'job';
+    var signal = suppressNoise ? matching.filter(function (t) { return !t.noise; }) : matching;
+    var noise = suppressNoise ? matching.filter(function (t) { return t.noise; }) : [];
+    var promo = noise.filter(function (t) { return t.keys.news; }).length;
+    var alerts = noise.filter(function (t) { return t.keys.jobleads && !t.keys.news; }).length;
+
     var errNote = (emailState.status === 'error' || emailState.status === 'stale') ?
       '<div class="error-state" style="margin-bottom:8px;">' + esc(emailState.error) + '</div>' : '';
-    if (list.length === 0) {
+
+    var html = errNote;
+    if (signal.length === 0 && noise.length === 0) {
       body.innerHTML = errNote + '<div class="empty-state">Nothing here right now.</div>';
       return;
     }
-    body.innerHTML = errNote + list.map(function (t) {
-      return '<div class="email-row" data-id="' + esc(t.id) + '">' +
-        '<div class="email-row-head">' +
-        '<div style="display:flex;gap:7px;align-items:flex-start;">' +
-        (t.unread ? '<span class="email-unread-dot"></span>' : '') +
-        '<div><div class="email-sender">' + esc(t.sender) + '</div>' +
-        '<div class="email-subject">' + esc(t.subject) + '</div></div></div>' +
-        '<div class="email-date">' + esc(new Date(t.date).toLocaleDateString([], { month: 'short', day: 'numeric' })) + '</div>' +
-        '</div>' +
-        '<div class="email-snippet">' + esc(t.snippet) + '</div>' +
-        '<div class="email-reasons">' + t.reasons.map(function (r) { return '<span class="reason-chip">' + esc(r) + '</span>'; }).join('') + '</div>' +
-        '</div>';
-    }).join('');
+    html += signal.slice(0, 8).map(emailRowHtml).join('');
+    if (signal.length === 0) {
+      html += '<div class="empty-state">Nothing needing attention &mdash; only filtered mail below.</div>';
+    }
+    if (noise.length) {
+      var parts = [];
+      if (promo) parts.push(promo + ' promotional');
+      if (alerts) parts.push(alerts + ' job alert' + (alerts === 1 ? '' : 's'));
+      html += '<button type="button" class="noise-toggle" id="noise-toggle">' +
+        '<span class="noise-caret">' + (noiseExpanded ? '\u25be' : '\u25b8') + '</span> ' +
+        esc(parts.join(' \u00b7 ')) + ' hidden</button>';
+      if (noiseExpanded) {
+        html += '<div class="noise-list">' + noise.slice(0, 15).map(emailRowHtml).join('') + '</div>';
+      }
+    }
+    body.innerHTML = html;
+
     $$('.email-row', body).forEach(function (row) {
       row.addEventListener('click', function () { row.classList.toggle('open'); });
     });
+    var toggle = document.getElementById('noise-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', function () { noiseExpanded = !noiseExpanded; renderEmail(); });
+    }
   }
 
   // ================= action items =================
@@ -765,7 +869,24 @@
         items.push({ id: 'rsvp-' + ev.id, group: 'Needs your RSVP', text: 'RSVP to "' + (ev.summary || 'Untitled event') + '"', meta: fmtEventWhen(ev) + (ev.start && ev.start.dateTime ? ' · ' + new Date(ev.start.dateTime).toLocaleDateString([], { month: 'short', day: 'numeric' }) : ''), url: ev.htmlLink });
       }
     });
-    emailState.threads.filter(function (t) { return t.unread; }).forEach(function (t) {
+    emailState.threads.filter(function (t) { return t.isPayment; }).forEach(function (t) {
+      var label = t.keys.disputed ? 'Dispute charge' : t.keys.due ? 'Pay' : 'Review renewal';
+      items.push({
+        id: 'pay-' + t.id, group: 'Money needs attention',
+        text: label + ': "' + t.subject + '"', meta: t.sender, url: null
+      });
+    });
+    emailState.threads.filter(function (t) { return t.keys.jobresp; }).forEach(function (t) {
+      items.push({
+        id: 'job-' + t.id, group: 'Job pipeline',
+        text: 'Follow up: "' + t.subject + '"', meta: t.sender, url: null
+      });
+    });
+    emailState.threads.filter(function (t) {
+      // Unclassified or clearly-personal unread mail only. The triage agent's noise
+      // verdicts and already-actioned categories never become "reply to this".
+      return t.unread && !t.noise && !t.isPayment && !t.keys.jobresp && !t.keys.receipt;
+    }).forEach(function (t) {
       var ageHours = (Date.now() - new Date(t.date).getTime()) / 3600000;
       if (ageHours > 20) {
         items.push({ id: 'reply-' + t.id, group: 'Waiting on a reply', text: 'Reply to "' + t.subject + '"', meta: t.sender, url: null });
@@ -886,8 +1007,10 @@
     if (emailState.status === 'blocked') {
       impEl.textContent = '—'; impEl.dataset.lastVal = '';
     } else if (emailState.status !== 'loading') {
-      var count = emailState.threads.filter(function (t) { return t.important && t.unread; }).length;
+      var count = emailState.threads.filter(function (t) { return t.keys.jobresp; }).length;
       countUp(impEl, count);
+      var sub = document.getElementById('stat-important-sub');
+      if (sub) sub.textContent = count === 0 ? 'nothing pending' : 'open in your pipeline';
     }
 
     var actEl = document.getElementById('stat-actions');
