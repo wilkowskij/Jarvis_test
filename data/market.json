@@ -44,35 +44,36 @@
       "label": "WTI Crude",
       "unit": "usd_bbl",
       "series": [
-        { "date": "2026-08-21", "close": 86.48 }
+        { "date": "2026-08-21", "close": 86.48 },
+        { "date": "2026-08-24", "close": 85.93 }
       ]
     }
   },
   "headlines": [
     {
+      "title": "Oil falls as investors await details of toughest-ever US sanctions campaign against Iran",
+      "source": "CNBC",
+      "date": "2026-08-24",
+      "url": "https://www.cnbc.com/2026/08/24/oil-price-today-wti-brent-us-sanctions-iran.html"
+    },
+    {
+      "title": "Asian stocks dip with AI trade in focus, oil declines as Jackson Hole, Nvidia earnings loom",
+      "source": "Bloomberg",
+      "date": "2026-08-23",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-23/stock-market-today-dow-s-p-live-updates"
+    },
+    {
+      "title": "Stock market next week: Outlook for Aug. 24-28, 2026",
+      "source": "CNBC",
+      "date": "2026-08-21",
+      "url": "https://www.cnbc.com/2026/08/21/stock-market-next-week-outlook-for-aug-24-28-2026.html"
+    },
+    {
       "title": "Dow surges 500 points Friday, but index posts back-to-back weekly losses",
       "source": "CNBC",
       "date": "2026-08-21",
       "url": "https://www.cnbc.com/2026/08/20/stock-market-today-live-updates.html"
-    },
-    {
-      "title": "S&P 500, Russell 2000 jump after tumultuous week for Treasurys",
-      "source": "TheStreet",
-      "date": "2026-08-21",
-      "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-21-2026"
-    },
-    {
-      "title": "US 10-year Treasury yield matches 2026 high near 4.74%, gold extends gains ahead of Jackson Hole",
-      "source": "Market Overview",
-      "date": "2026-08-21",
-      "url": "https://note.com/nk_advisory/n/nf5fd15df0d38?hl=en"
-    },
-    {
-      "title": "S&P 500 slips from record high but caps third straight week of gains",
-      "source": "Yahoo Finance",
-      "date": "2026-08-14",
-      "url": "https://finance.yahoo.com/markets/live/stock-market-today-friday-august-14-dow-sp-500-nasdaq-102635519.html"
     }
   ],
-  "lastRefreshed": "2026-08-24T00:00:00Z"
+  "lastRefreshed": "2026-08-24T15:30:00Z"
 }
