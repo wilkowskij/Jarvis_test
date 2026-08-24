@@ -12,7 +12,7 @@ Last updated: 2026-08-24 (see review log at bottom for cadence).
 - [x] Committed to `claude/interactive-animated-dashboard-ih4ynk` (`b6aa09d`, `638a6cc`)
 - [x] Market-refresh Routine created and fixed (push-access bug found + patched)
 - [x] First unattended weekday auto-fire observed: 2026-08-24 11:20:43 UTC, found genuine new data (10Y yield 4.71%, gold $4,645.74) and published successfully.
-- [ ] **Recurring bug: the fire's `git push` did not land, a second time**, despite the `access: "push"` fix applied after the first occurrence (fixed 02:44 UTC, this fire was 11:20 UTC — well after the fix). Repo and artifact drifted again; manually reconciled during this review (commit follows). Root cause still unconfirmed — this session has no way to read the fired session's own command output/logs to diagnose further. **Needs a decision**: try a more explicit push-verification instruction, or investigate a different way (e.g. fire once interactively and watch it directly).
+- [ ] **Recurring bug: the fire's `git push` did not land, a second time**, despite the `access: "push"` fix applied after the first occurrence (fixed 02:44 UTC, this fire was 11:20 UTC — well after the fix). Repo and artifact drifted again; manually reconciled during this review (commit follows). Root cause still unconfirmed — this session has no way to read the fired session's own command output/logs to diagnose further. **Decision (2026-08-24): accepted as a known issue.** The daily review is the safety net — it detects the drift and reconciles the repo each morning, so the artifact is never more than a day stale from git. Not worth further investigation right now; revisit if reconciliation itself ever fails or the drift window becomes a problem.
 
 ## Phase 2 — Inbox triage: rubric & taxonomy
 
@@ -59,5 +59,5 @@ Last updated: 2026-08-24 (see review log at bottom for cadence).
 | When | What changed | Next gate |
 |---|---|---|
 | 2026-08-24 (this session) | Checklist created; state audited via `list_labels` + `git status` | See review schedule below |
-| 2026-08-24 13:19 UTC (auto review #1) | First unattended market-refresh fire happened and published real data, but its git push failed again (recurrence — see Phase 1). Reconciled repo to match published artifact. Gmail label counts unchanged since last check (no drift); INBOX unread +12, normal incoming mail, not a red flag. | **User decision needed on the recurring push failure** before trusting this Routine unattended long-term. Phase 3/4 (dashboard commit, remaining triage) still open. |
+| 2026-08-24 13:19 UTC (auto review #1) | First unattended market-refresh fire happened and published real data, but its git push failed again (recurrence — see Phase 1). Reconciled repo to match published artifact. Gmail label counts unchanged since last check (no drift); INBOX unread +12, normal incoming mail, not a red flag. | Decision made: keep the Routine as-is, daily review absorbs the drift. Phase 3 closed out this session. Phase 4 (remaining triage) still open. |
 
