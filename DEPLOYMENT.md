@@ -25,8 +25,8 @@ Last updated: 2026-08-24 (see review log at bottom for cadence).
 
 - [x] `index.html` updated: `CATEGORY_LABELS` map, category-aware `scoreThread`, badges, noise collapsing, new filter chips, payment/job action items, job-pipeline stat tile
 - [x] Scoring logic unit-tested against 5 representative threads — ranks correctly
-- [ ] **Not committed or pushed yet** — `git status` shows `index.html` modified, `agent/` untracked
-- [ ] Not republished to the live artifact — the dashboard you can see right now does **not** yet have category badges or noise collapsing
+- [x] Committed and pushed (`9fcfd97`)
+- [x] Republished to the live artifact — category badges and noise collapsing are now live
 
 ## Phase 4 — Inbox triage: applying to real mail
 
@@ -40,6 +40,12 @@ Last updated: 2026-08-24 (see review log at bottom for cadence).
 
 - [ ] **Blocked on this org's connector policy**: `create_trigger`'s `connectors` param is rejected here, so a fresh-session Routine can't reach Gmail. A twice-daily triage Routine must be created in the **claude.ai Routines UI** instead (connectors attach there), pointed at `agent/inbox-triage.md` in the repo.
 - [ ] Decide: does production triage run unattended once trusted, or does every batch get a human pass first (given how Phase 4 actually went)? This affects whether the Routine should ever leave dry-run mode.
+
+## Phase 4.5 — Not yet done
+
+- [ ] 32 of the original 50 dry-run threads still need a verdict (interrupted mid-batch, see Phase 4)
+- [ ] ~150 threads in the 7-day window never reached, including the Deloitte calibration case
+- [ ] Blast-radius re-check after the next labeling batch
 
 ## Phase 6 — Documentation
 
