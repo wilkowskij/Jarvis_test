@@ -60,4 +60,5 @@ Last updated: 2026-08-24 (see review log at bottom for cadence).
 |---|---|---|
 | 2026-08-24 (this session) | Checklist created; state audited via `list_labels` + `git status` | See review schedule below |
 | 2026-08-24 13:19 UTC (auto review #1) | First unattended market-refresh fire happened and published real data, but its git push failed again (recurrence — see Phase 1). Reconciled repo to match published artifact. Gmail label counts unchanged since last check (no drift); INBOX unread +12, normal incoming mail, not a red flag. | Decision made: keep the Routine as-is, daily review absorbs the drift. Phase 3 closed out this session. Phase 4 (remaining triage) still open. |
+| 2026-08-25 13:07 UTC (auto review #2) | Market Routine fired again (Aug 25, 11:22 UTC), found real new data (sp500/nasdaq/dow caught up to Aug 24, gold/wti advanced to Aug 25), push again did not land (expected per 2026-08-24 decision). Reconciled repo silently, no user report needed. Gmail label counts unchanged; INBOX unread +68 over 24h, normal organic growth, no red flag. Nothing else pending. | Phase 4 (remaining ~150 threads) still the only open item awaiting the user. |
 
