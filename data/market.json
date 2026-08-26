@@ -7,7 +7,8 @@
       "series": [
         { "date": "2026-08-14", "close": 7785.76 },
         { "date": "2026-08-21", "close": 7674.37 },
-        { "date": "2026-08-24", "close": 7652.79 }
+        { "date": "2026-08-24", "close": 7652.79 },
+        { "date": "2026-08-25", "close": 7677.28 }
       ]
     },
     "nasdaq": {
@@ -16,7 +17,8 @@
       "series": [
         { "date": "2026-08-14", "close": 26729.16 },
         { "date": "2026-08-21", "close": 26180.45 },
-        { "date": "2026-08-24", "close": 25980.19 }
+        { "date": "2026-08-24", "close": 25980.19 },
+        { "date": "2026-08-25", "close": 26151.30 }
       ]
     },
     "dow": {
@@ -25,7 +27,8 @@
       "series": [
         { "date": "2026-08-14", "close": 53732.41 },
         { "date": "2026-08-21", "close": 53277.01 },
-        { "date": "2026-08-24", "close": 53417.16 }
+        { "date": "2026-08-24", "close": 53417.16 },
+        { "date": "2026-08-25", "close": 53579.94 }
       ]
     },
     "yield10y": {
@@ -34,7 +37,8 @@
       "series": [
         { "date": "2026-08-14", "close": 4.68 },
         { "date": "2026-08-21", "close": 4.70 },
-        { "date": "2026-08-24", "close": 4.71 }
+        { "date": "2026-08-24", "close": 4.71 },
+        { "date": "2026-08-25", "close": 4.66 }
       ]
     },
     "gold": {
@@ -58,29 +62,29 @@
   },
   "headlines": [
     {
-      "title": "Stock market today: S&P 500, Nasdaq futures recover in countdown to Nvidia earnings, Fed Jackson Hole summit",
-      "source": "Yahoo Finance",
-      "date": "2026-08-25",
-      "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-august-25-dow-sp-500-nasdaq-080527092.html"
-    },
-    {
-      "title": "US Stock Market Today: Sandisk clears $1,525 as QQQ reclaims $711 premarket",
+      "title": "US Stock Market Today 08/26/2026: Intuit Slides 10% as QQQ Starts New Trade Date Lower",
       "source": "ts2.tech",
-      "date": "2026-08-25",
-      "url": "https://ts2.tech/en/stock-market-today-08-25-2026/"
+      "date": "2026-08-26",
+      "url": "https://ts2.tech/en/stock-market-today-08-26-2026/"
     },
     {
-      "title": "Gold Holds Near Three-Month High as Debasement Trade Returns",
+      "title": "Stock Market Today: Dow, S&P Live Updates for August 26",
+      "source": "Bloomberg",
+      "date": "2026-08-25",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-25/asian-stocks-set-to-gain-as-oil-extends-declines-markets-wrap"
+    },
+    {
+      "title": "Stock Market News for Aug 25, 2026",
       "source": "Yahoo Finance",
       "date": "2026-08-25",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-holds-near-three-month-232929280.html"
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-aug-25-132700491.html"
     },
     {
-      "title": "The debasement trade is back, but gold still faces risks - Analysts",
-      "source": "Kitco News",
-      "date": "2026-08-24",
-      "url": "https://www.kitco.com/news/article/2026-08-24/debasement-trade-back-gold-still-faces-risks-analysts"
+      "title": "Crude Oil Price Today, August 25, 2026: Brent Ends Near $87 as the War Premium Unwinds",
+      "source": "Eastern Herald",
+      "date": "2026-08-25",
+      "url": "https://easternherald.com/2026/08/25/crude-oil-price-today-august-25-2026/"
     }
   ],
-  "lastRefreshed": "2026-08-25T11:24:27Z"
+  "lastRefreshed": "2026-08-26T11:31:44Z"
 }
