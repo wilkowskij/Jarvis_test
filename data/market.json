@@ -10,7 +10,8 @@
         { "date": "2026-08-24", "close": 7652.79 },
         { "date": "2026-08-25", "close": 7677.28 },
         { "date": "2026-08-27", "close": 7730.99 },
-        { "date": "2026-08-28", "close": 7711.76 }
+        { "date": "2026-08-28", "close": 7711.76 },
+        { "date": "2026-08-31", "close": 7686.14 }
       ]
     },
     "nasdaq": {
@@ -22,7 +23,8 @@
         { "date": "2026-08-24", "close": 25980.19 },
         { "date": "2026-08-25", "close": 26151.30 },
         { "date": "2026-08-27", "close": 26541.35 },
-        { "date": "2026-08-28", "close": 26402.42 }
+        { "date": "2026-08-28", "close": 26402.42 },
+        { "date": "2026-08-31", "close": 26370.89 }
       ]
     },
     "dow": {
@@ -34,7 +36,8 @@
         { "date": "2026-08-24", "close": 53417.16 },
         { "date": "2026-08-25", "close": 53579.94 },
         { "date": "2026-08-27", "close": 53569.44 },
-        { "date": "2026-08-28", "close": 53559.99 }
+        { "date": "2026-08-28", "close": 53559.99 },
+        { "date": "2026-08-31", "close": 53185.90 }
       ]
     },
     "yield10y": {
@@ -46,7 +49,8 @@
         { "date": "2026-08-24", "close": 4.71 },
         { "date": "2026-08-25", "close": 4.66 },
         { "date": "2026-08-27", "close": 4.67 },
-        { "date": "2026-08-28", "close": 4.73 }
+        { "date": "2026-08-28", "close": 4.73 },
+        { "date": "2026-08-31", "close": 4.75 }
       ]
     },
     "gold": {
@@ -57,7 +61,8 @@
         { "date": "2026-08-24", "close": 4645.74 },
         { "date": "2026-08-25", "close": 4637.17 },
         { "date": "2026-08-27", "close": 4602.69 },
-        { "date": "2026-08-31", "close": 4459.01 }
+        { "date": "2026-08-31", "close": 4459.01 },
+        { "date": "2026-09-01", "close": 4374.30 }
       ]
     },
     "wti": {
@@ -69,35 +74,36 @@
         { "date": "2026-08-25", "close": 85.67 },
         { "date": "2026-08-27", "close": 81.36 },
         { "date": "2026-08-28", "close": 83.10 },
-        { "date": "2026-08-31", "close": 85.50 }
+        { "date": "2026-08-31", "close": 85.50 },
+        { "date": "2026-09-01", "close": 86.57 }
       ]
     }
   },
   "headlines": [
     {
-      "title": "Stock Market Today (Aug. 31, 2026): Dow futures fall on escalation of U.S.-Iran conflict",
+      "title": "Stock Market Today (Sept. 1, 2026): Dow futures slide on renewed U.S.-Iran conflict",
       "source": "TheStreet",
-      "date": "2026-08-31",
-      "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-31-2026"
+      "date": "2026-09-01",
+      "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-1-2026"
     },
     {
-      "title": "WTI Oil appreciates beyond $85.50 as tensions rise in Iran",
-      "source": "FXStreet",
-      "date": "2026-08-31",
-      "url": "https://www.fxstreet.com/news/wti-oil-appreciates-beyond-8550-as-tensions-rise-in-iran-202608311008"
+      "title": "Stock market today: Dow, S&P 500, Nasdaq futures fall as inflation, Fed rate-hike fears persist",
+      "source": "Yahoo Finance",
+      "date": "2026-09-01",
+      "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-september-1-dow-sp-500-nasdaq-080617884.html"
     },
     {
-      "title": "Stock Market Today: Dow, S&P Live Updates for August 31",
-      "source": "Bloomberg",
-      "date": "2026-08-30",
-      "url": "https://www.bloomberg.com/news/articles/2026-08-30/stock-market-today-dow-s-p-live-updates"
-    },
-    {
-      "title": "Stock futures fall after U.S. strikes Iran; Wall Street heads for winning month: Live updates",
+      "title": "Dow futures fall 200 points to kick off September as global bond yields rise: Live updates",
       "source": "CNBC",
-      "date": "2026-08-30",
-      "url": "https://www.cnbc.com/2026/08/30/stock-market-today-live-updates.html"
+      "date": "2026-08-31",
+      "url": "https://www.cnbc.com/2026/08/31/stock-market-today-live-updates.html"
+    },
+    {
+      "title": "Stock Market News for Sep 1, 2026",
+      "source": "Yahoo Finance",
+      "date": "2026-09-01",
+      "url": "https://ca.finance.yahoo.com/news/stock-market-news-sep-1-085900862.html"
     }
   ],
-  "lastRefreshed": "2026-08-31T11:26:57Z"
+  "lastRefreshed": "2026-09-01T11:31:09Z"
 }
