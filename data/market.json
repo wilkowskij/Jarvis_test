@@ -11,7 +11,8 @@
         { "date": "2026-08-25", "close": 7677.28 },
         { "date": "2026-08-27", "close": 7730.99 },
         { "date": "2026-08-28", "close": 7711.76 },
-        { "date": "2026-08-31", "close": 7686.14 }
+        { "date": "2026-08-31", "close": 7686.14 },
+        { "date": "2026-09-01", "close": 7631.47 }
       ]
     },
     "nasdaq": {
@@ -24,7 +25,8 @@
         { "date": "2026-08-25", "close": 26151.30 },
         { "date": "2026-08-27", "close": 26541.35 },
         { "date": "2026-08-28", "close": 26402.42 },
-        { "date": "2026-08-31", "close": 26370.89 }
+        { "date": "2026-08-31", "close": 26370.89 },
+        { "date": "2026-09-01", "close": 26099.77 }
       ]
     },
     "dow": {
@@ -37,7 +39,8 @@
         { "date": "2026-08-25", "close": 53579.94 },
         { "date": "2026-08-27", "close": 53569.44 },
         { "date": "2026-08-28", "close": 53559.99 },
-        { "date": "2026-08-31", "close": 53185.90 }
+        { "date": "2026-08-31", "close": 53185.90 },
+        { "date": "2026-09-01", "close": 52766.88 }
       ]
     },
     "yield10y": {
@@ -50,7 +53,8 @@
         { "date": "2026-08-25", "close": 4.66 },
         { "date": "2026-08-27", "close": 4.67 },
         { "date": "2026-08-28", "close": 4.73 },
-        { "date": "2026-08-31", "close": 4.75 }
+        { "date": "2026-08-31", "close": 4.75 },
+        { "date": "2026-09-01", "close": 4.81 }
       ]
     },
     "gold": {
@@ -81,29 +85,29 @@
   },
   "headlines": [
     {
-      "title": "Stock Market Today (Sept. 1, 2026): Dow futures slide on renewed U.S.-Iran conflict",
+      "title": "Stock Market Today (Sept. 2, 2026): Dow futures fall as oil prices rise and bond yields climb",
       "source": "TheStreet",
-      "date": "2026-09-01",
-      "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-1-2026"
+      "date": "2026-09-02",
+      "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-02-2026"
     },
     {
-      "title": "Stock market today: Dow, S&P 500, Nasdaq futures fall as inflation, Fed rate-hike fears persist",
-      "source": "Yahoo Finance",
+      "title": "Stock Market Today: Dow, S&P Live Updates for September 2",
+      "source": "Bloomberg",
       "date": "2026-09-01",
-      "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-september-1-dow-sp-500-nasdaq-080617884.html"
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/stock-market-today-dow-s-p-live-updates"
     },
     {
-      "title": "Dow futures fall 200 points to kick off September as global bond yields rise: Live updates",
+      "title": "WTI Oil climbs toward $87 as US-Iran tensions threaten supply",
+      "source": "FXStreet",
+      "date": "2026-09-01",
+      "url": "https://www.fxstreet.com/news/wti-oil-climbs-toward-87-as-us-iran-tensions-threaten-supply-202609011003"
+    },
+    {
+      "title": "Stock market news for Sept. 1, 2026",
       "source": "CNBC",
       "date": "2026-08-31",
       "url": "https://www.cnbc.com/2026/08/31/stock-market-today-live-updates.html"
-    },
-    {
-      "title": "Stock Market News for Sep 1, 2026",
-      "source": "Yahoo Finance",
-      "date": "2026-09-01",
-      "url": "https://ca.finance.yahoo.com/news/stock-market-news-sep-1-085900862.html"
     }
   ],
-  "lastRefreshed": "2026-09-01T11:31:09Z"
+  "lastRefreshed": "2026-09-02T11:17:47Z"
 }
